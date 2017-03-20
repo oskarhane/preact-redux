@@ -90,6 +90,24 @@ describe('preact-redux', () => {
 				onB: spies.onB
 			});
 		});
+		it('should not overwrite passed props with default on connect', () => {
+
+			let store = createStore( a => a );
+			let Child = sinon.stub().returns(<div />);
+
+			let mapDispatchToProps = (d, p = {}) => {
+				expect(p).to.deep.equal({c: "c", children: []});
+				return {};
+			};
+
+			let ConnectedChild = connect(null, mapDispatchToProps)(Child);
+
+			render((
+				<Provider store={store}>
+					<ConnectedChild c="c" />
+				</Provider>
+			), document.createElement('div'));
+		});
 	});
 
 	describe('connectAdvanced()', () => {
